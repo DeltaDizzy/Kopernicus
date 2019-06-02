@@ -47,15 +47,17 @@ namespace Kopernicus.Components
          * }
          */
         
+        //Name of targeted PartModule
         [KSPField(isPersistant =  false, guiActive = false)]
         public String module;
-
+        
         [KSPField(isPersistant =  false, guiActive = false)]
         public String key;
 
         [KSPField(isPersistant =  false, guiActive = false)]
         public String value;
 
+        //Triggered action?
         [KSPField(isPersistant =  false, guiActive = false)]
         public String toggle;
 
@@ -72,9 +74,9 @@ namespace Kopernicus.Components
 
         public override void OnStart(StartState state)
         {
-            StringCollectionParser parser = new StringCollectionParser();
-            parser.SetFromString(toggle);
-            _toggle = parser;
+            StringCollectionParser parser = new StringCollectionParser(); //Comma seperated list
+            parser.SetFromString(toggle); //Actions to be triggered
+            _toggle = parser; //list of actions
             
             Type type = Parser.ModTypes.Find(t => t.Name == module && typeof(PartModule).IsAssignableFrom(t));
             for (Int32 i = 0; i < part.Modules.Count; i++)
