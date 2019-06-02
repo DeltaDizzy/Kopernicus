@@ -78,24 +78,26 @@ namespace Kopernicus.Components
             parser.SetFromString(toggle); //Actions to be triggered
             _toggle = parser; //list of actions
             
-            Type type = Parser.ModTypes.Find(t => t.Name == module && typeof(PartModule).IsAssignableFrom(t));
-            for (Int32 i = 0; i < part.Modules.Count; i++)
+            //Find a Type where the name matches the targeted PartModule and the module is assignable from the assembly t
+            Type type = Parser.ModTypes.Find(t => t.Name == module && typeof(PartModule).IsAssignableFrom(t)); 
+            for (Int32 i = 0; i < part.Modules.Count; i++) //Iterate through all modules on this part
             {
                 PartModule partModule = part.Modules[i];
-                if (!type.IsInstanceOfType(partModule))
+                //if type is not an instance of this partmodule, skip the rest of this block and continue the loop
+                if (!type.IsInstanceOfType(partModule))                 
                 {
                     continue;
                 }
 
-                BaseField field = partModule.Fields[key];
-                String fieldValue = field.GetValue(partModule).ToString();
-                if (fieldValue != value)
+                BaseField field = partModule.Fields[key]; //field = the field named the same as key
+                String fieldValue = field.GetValue(partModule).ToString(); //get the value of that field
+                if (fieldValue != value) //if that value isnt what we want, continue
                 {
                     continue;
                 }
 
-                _targetModule = partModule;
-                break;
+                _targetModule = partModule; //we found the right module
+                break; //stop the loop
             }
         }
 
@@ -139,17 +141,17 @@ namespace Kopernicus.Components
                 return;
             }
             
-            for (Int32 i = 0; i < _toggle.Count; i++)
+            for (Int32 i = 0; i < _toggle.Count; i++) //iterate through all the toggless
             {
-                if (_targetModule.Events[_toggle[i]] != null)
+                if (_targetModule.Events[_toggle[i]] != null) //if it is an event, enable the gui if we are near the scatter
                 {
                     _targetModule.Events[_toggle[i]].guiActive = _isNearObject;
                 }
-                if (_targetModule.Actions[_toggle[i]] != null)
+                if (_targetModule.Actions[_toggle[i]] != null) //if it is an action, activate it if we are near the scatter
                 {
                     _targetModule.Actions[_toggle[i]].active = _isNearObject;
                 }
-                if (_targetModule.Fields[_toggle[i]] != null)
+                if (_targetModule.Fields[_toggle[i]] != null) //if it is a field, show it if we are near the scatter
                 {
                     _targetModule.Fields[_toggle[i]].guiActive = _isNearObject;
                 }
